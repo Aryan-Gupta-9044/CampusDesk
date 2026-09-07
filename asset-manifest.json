@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/CampusDesk/static/css/main.6827054e.css",
+    "main.js": "/CampusDesk/static/js/main.e7443736.js",
+    "index.html": "/CampusDesk/index.html",
+    "main.6827054e.css.map": "/CampusDesk/static/css/main.6827054e.css.map",
+    "main.e7443736.js.map": "/CampusDesk/static/js/main.e7443736.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6827054e.css",
+    "static/js/main.e7443736.js"
+  ]
+}
