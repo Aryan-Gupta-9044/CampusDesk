@@ -33,6 +33,9 @@ jobs:
         run: npm ci
 
       - name: Build React app
+        env:
+          REACT_APP_SUPABASE_URL: ${{ vars.REACT_APP_SUPABASE_URL }}
+          REACT_APP_SUPABASE_ANON_KEY: ${{ vars.REACT_APP_SUPABASE_ANON_KEY }}
         run: npm run build
 
       - name: Setup GitHub Pages
