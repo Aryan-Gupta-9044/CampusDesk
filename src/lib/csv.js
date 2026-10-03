@@ -1,0 +1,22 @@
+// Deliberately not using a library here — after fixing a cascade of
+// dependency-resolution issues elsewhere in this project, adding another
+// npm package for a simple comma-separated format isn't worth the risk.
+// Assumes plain fields (no embedded commas/quotes), which is fine for
+// names, emails, roll numbers, and dates.
+export function parseCSV(text) {
+  const lines = text
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0);
+  if (lines.length < 2) return [];
+
+  const headers = lines[0].split(",").map((h) => h.trim());
+  return lines.slice(1).map((line) => {
+    const cells = line.split(",").map((c) => c.trim());
+    const row = {};
+    headers.forEach((h, i) => {
+      row[h] = cells[i] || "";
+    });
+    return row;
+  });
+}
