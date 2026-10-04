@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useAuth } from "../../context/AuthContext";
-import { uploadDocument, listMyDocuments, getDocumentUrl, deleteDocument } from "../../lib/storage";
+import { uploadDocument, listMyDocuments, getDocumentUrl, deleteDocument, DOCUMENT_ACCEPT } from "../../lib/storage";
 
 const CATEGORIES = ["ID Proof", "Certificate", "Fee Receipt", "Assignment", "Other"];
 const REQUIRED_BY_ROLE = {
@@ -18,6 +18,7 @@ function Documents() {
   const [uploading, setUploading] = useState(false);
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const load = async () => {
     setLoading(true);
@@ -41,8 +42,10 @@ function Documents() {
     if (!file) return;
     setUploading(true);
     setError("");
+    setSuccess("");
     try {
       await uploadDocument(user.id, file, category);
+      setSuccess(`Uploaded "${file.name}".`);
       await load();
     } catch (err) {
       setError(err.message);
@@ -63,8 +66,11 @@ function Documents() {
 
   const handleDelete = async (path) => {
     if (!window.confirm("Delete this document?")) return;
+    setError("");
+    setSuccess("");
     try {
       await deleteDocument(path);
+      setSuccess("Document deleted.");
       await load();
     } catch (err) {
       setError(err.message);
@@ -80,7 +86,7 @@ function Documents() {
         <div>
           <p className="eyebrow">Account</p>
           <h1>My documents</h1>
-          <p className="lede">Upload by category — only you and admins can see these.</p>
+          <p className="lede">Upload by category (PDF, image, Word or text, up to 10 MB) — only you and admins can see these.</p>
         </div>
         <div style={{ display: "flex", gap: "8px" }}>
           <select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -90,12 +96,13 @@ function Documents() {
           </select>
           <label className="button primary-button" style={{ cursor: "pointer" }}>
             {uploading ? "Uploading…" : "+ Upload"}
-            <input type="file" onChange={handleUpload} style={{ display: "none" }} disabled={uploading} />
+            <input type="file" accept={DOCUMENT_ACCEPT} onChange={handleUpload} style={{ display: "none" }} disabled={uploading} />
           </label>
         </div>
       </div>
 
       {error && <p className="form-error">{error}</p>}
+      {success && <p className="lede">{success}</p>}
 
       {required.length > 0 && (
         <div className="module-grid" style={{ marginBottom: "20px" }}>
@@ -121,7 +128,7 @@ function Documents() {
               <span className="student-summary">
                 <strong>{f.displayName}</strong>
                 <small>
-                  {f.category} · {f.metadata?.size ? `${Math.round(f.metadata.size / 1024)} KB` : ""}
+                  {f.category}{f.metadata?.size ? ` · ${Math.round(f.metadata.size / 1024)} KB` : ""}
                 </small>
               </span>
               <button className="text-link" type="button" onClick={() => handleView(f.path)}>

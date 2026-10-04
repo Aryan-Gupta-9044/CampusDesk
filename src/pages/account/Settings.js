@@ -31,6 +31,7 @@ function Settings() {
       setAvatarError(err.message);
     } finally {
       setAvatarUploading(false);
+      event.target.value = ""; // allow re-selecting the same file
     }
   };
 
@@ -98,7 +99,7 @@ function Settings() {
       </div>
 
       <div className="student-form">
-        <p className="eyebrow">Profile photo</p>
+        <p className="eyebrow">Profile photo (JPG, PNG, WebP or GIF, up to 2 MB)</p>
         {avatarError && <p className="form-error">{avatarError}</p>}
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           {profile?.avatar_url ? (
@@ -114,7 +115,7 @@ function Settings() {
           )}
           <label className="button secondary-button" style={{ cursor: "pointer" }}>
             {avatarUploading ? "Uploading…" : "Change photo"}
-            <input type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: "none" }} disabled={avatarUploading} />
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleAvatarChange} style={{ display: "none" }} disabled={avatarUploading} />
           </label>
         </div>
       </div>

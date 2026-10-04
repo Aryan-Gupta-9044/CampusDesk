@@ -82,13 +82,13 @@ Editor, run (in order):
 
 1. `supabase_schema.sql` — all tables, the auto-profile trigger, and RLS
    policies
-2. `storage_policies.sql` — after creating the `avatars` (public),
-   `documents` (private), and `receipts` (private) storage buckets
+2. `storage_setup.sql` — creates the `avatars` (public), `documents` and
+   `receipts` (private) buckets and their policies; no manual bucket creation
 3. `leave_requests_patch.sql` — fixes a gap where teachers could approve
    student leave but not see it
-4. `profiles_rls_patch.sql` — allows any logged-in user to read basic
-   profile info (name/email), fixing several "row not found" style
-   errors caused by embedded lookups (e.g. a student's own fee page)
+4. `profiles_rls_patch.sql` — scoped profile reads (teachers' profiles for
+   everyone, a parent's own child, a student's own parent, student profiles
+   for teachers) plus protection against self-changing role/status
 5. `feature_additions_patch.sql` — fee payment verification states,
    teacher-managed timetable permissions, and the `teacher_queries` table
    for the chat feature
@@ -176,5 +176,5 @@ src/
 3. `supabase/leave_requests_patch.sql` (if not already applied)
 4. `supabase/profiles_rls_patch.sql` — scoped profile reads (replaces the old "everyone reads every profile" policy) + role/status protection
 5. `supabase/fee_payment_guard_patch.sql` — one pending request per fee, no new overpayment, positive amounts
-6. `supabase/storage_policies.sql`
+6. `supabase/storage_setup.sql` — creates the `avatars`, `documents` and `receipts` buckets and their access policies (replaces the old storage_policies.sql; no manual bucket creation needed)
 7. (optional, test data only) `supabase/seed_dummy_data.sql` — run as ONE script/transaction
