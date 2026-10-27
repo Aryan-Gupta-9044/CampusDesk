@@ -178,3 +178,6 @@ src/
 5. `supabase/fee_payment_guard_patch.sql` — one pending request per fee, no new overpayment, positive amounts
 6. `supabase/storage_setup.sql` — creates the `avatars`, `documents` and `receipts` buckets and their access policies (replaces the old storage_policies.sql; no manual bucket creation needed)
 7. (optional, test data only) `supabase/seed_dummy_data.sql` — run as ONE script/transaction
+
+
+used Supabase DataBase
